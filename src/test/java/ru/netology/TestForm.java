@@ -77,7 +77,7 @@ public class TestForm {
 
 
         @Test
-        public void shouldNotSendWrongTeld () {
+        public void shouldNotSendNoAgreement () {
             driver.get("http://localhost:9999");
             driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Алексей М");
             driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
