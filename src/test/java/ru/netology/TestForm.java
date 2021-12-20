@@ -83,6 +83,6 @@ public class TestForm {
             driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
 //            driver.findElement(By.cssSelector(".checkbox__box")).click();
             driver.findElement(By.cssSelector("button")).click();
-            driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid")).getText().trim();
+            driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid"));
         }
     }
