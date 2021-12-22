@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -58,7 +57,7 @@ public class TestForm {
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
         driver.findElement(By.cssSelector(".checkbox__box")).click();
         driver.findElement(By.cssSelector("button")).click();
-        String actualText = driver.findElement(By.cssSelector("[class=\"input__sub\"]")).getText().trim();
+        String actualText = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
         String expected = "Поле обязательно для заполнения";
         assertEquals(expected, actualText);
     }
@@ -76,13 +75,49 @@ public class TestForm {
     }
 
 
-        @Test
-        public void shouldNotSendNoAgreement () {
-            driver.get("http://localhost:9999");
-            driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Алексей М");
-            driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
+    @Test
+    public void shouldNotSendNoAgreement() {
+        driver.get("http://localhost:9999");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Алексей М");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
 //            driver.findElement(By.cssSelector(".checkbox__box")).click();
-            driver.findElement(By.cssSelector("button")).click();
-            driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid"));
-        }
+        driver.findElement(By.cssSelector("button")).click();
+        driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid"));
     }
+
+    @Test
+    public void shouldNotSendNoTel() {
+        driver.get("http://localhost:9999");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Алексей М");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("");
+        driver.findElement(By.cssSelector(".checkbox__box")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actualText = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
+        String expected = "Поле обязательно для заполнения";
+        assertEquals(expected, actualText);
+    }
+
+    @Test
+    public void shouldNotSendWrongName() {
+        driver.get("http://localhost:9999");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Aleksey");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
+        driver.findElement(By.cssSelector(".checkbox__box")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actualText = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        assertEquals(expected, actualText);
+    }
+
+    @Test
+    public void shouldSendFormDashName() {
+        driver.get("http://localhost:9999");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Алексей М-Н");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79211234567");
+        driver.findElement(By.cssSelector(".checkbox__box")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String actualText = driver.findElement(By.cssSelector("[data-test-id='order-success']")).getText().trim();
+        String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
+        assertEquals(expected, actualText);
+    }
+}
